@@ -29,8 +29,8 @@
     padding:0 16px calc(48px + env(safe-area-inset-bottom));
   }
   .wrap{max-width:480px;margin:0 auto}
-  h1{font-size:34px;font-weight:700;letter-spacing:.37px;margin:28px 0 18px}
-  .group-label{font-size:13px;color:var(--secondary);margin:26px 4px 7px}
+  h1{font-size:34px;font-weight:700;letter-spacing:.37px;margin:28px 0 16px}
+  .group-label{font-size:13px;color:var(--secondary);margin:26px 4px 7px;display:flex;justify-content:space-between}
   .card{background:var(--card);border-radius:var(--radius);overflow:hidden}
   .row{display:flex;align-items:center;gap:12px;padding:11px 16px;min-height:44px;position:relative}
   .row+.row::before{content:"";position:absolute;top:0;left:16px;right:0;height:.5px;background:var(--sep)}
@@ -38,35 +38,21 @@
   .value{color:var(--secondary);font-variant-numeric:tabular-nums}
   .tap{cursor:pointer}
 
-  .seg{display:flex;background:var(--fill);border-radius:9px;padding:2px;margin-bottom:14px}
-  .seg button{flex:1;border:none;background:none;font:inherit;font-size:13px;font-weight:500;color:var(--label);
-    padding:7px 4px;border-radius:7px;cursor:pointer;transition:background .2s}
-  .seg button[aria-selected=true]{background:var(--card);box-shadow:0 3px 8px rgba(0,0,0,.12)}
-
-  .stage{position:relative;background:#000;border-radius:16px;overflow:hidden;aspect-ratio:3/4;
-    display:flex;align-items:center;justify-content:center}
-  .stage video,.stage img{width:100%;height:100%;object-fit:cover;display:block}
-  .stage .hint{color:rgba(255,255,255,.65);font-size:14px;padding:24px;text-align:center}
-  .frame{position:absolute;inset:12%;pointer-events:none}
-  .frame i{position:absolute;width:26px;height:26px;border:3px solid rgba(255,255,255,.9);border-radius:3px}
-  .frame i:nth-child(1){top:0;left:0;border-right:none;border-bottom:none}
-  .frame i:nth-child(2){top:0;right:0;border-left:none;border-bottom:none}
-  .frame i:nth-child(3){bottom:0;left:0;border-right:none;border-top:none}
-  .frame i:nth-child(4){bottom:0;right:0;border-left:none;border-top:none}
-  .beam{position:absolute;left:12%;right:12%;height:2px;background:var(--green);
-    box-shadow:0 0 12px var(--green);animation:sweep 2.4s ease-in-out infinite}
-  @keyframes sweep{0%,100%{top:14%}50%{top:84%}}
-  @media (prefers-reduced-motion:reduce){.beam{animation:none;top:50%}}
-
   .primary,.secondary{width:100%;border:none;font:inherit;font-size:17px;font-weight:600;
     height:50px;border-radius:14px;cursor:pointer;margin-top:12px}
   .primary{background:var(--blue);color:#fff}
-  .primary.stop{background:var(--red)}
   .secondary{background:var(--fill);color:var(--blue)}
   .primary:disabled{opacity:.45}
   .linkbtn{display:block;width:100%;background:none;border:none;font:inherit;font-size:15px;
     color:var(--blue);padding:12px 0 0;cursor:pointer}
   input[type=file]{display:none}
+
+  .dropzone{
+    background:var(--card);border-radius:16px;padding:26px 20px;text-align:center;cursor:pointer;
+    border:1px dashed var(--tertiary)
+  }
+  .dropzone .big{font-size:17px;font-weight:600}
+  .dropzone .sm{font-size:13px;color:var(--secondary);margin-top:4px}
 
   .progress{display:none;margin-top:12px;background:var(--card);border-radius:var(--radius);padding:14px 16px}
   .progress.on{display:block}
@@ -78,10 +64,24 @@
   .ptop span{font-size:13px;color:var(--secondary);font-variant-numeric:tabular-nums}
   .track{height:4px;background:var(--fill);border-radius:2px;margin-top:12px;overflow:hidden}
   .track i{display:block;height:100%;background:var(--blue);width:0;border-radius:2px;transition:width .3s}
-  .steps{margin:10px 0 0;padding:0;list-style:none;font-size:13px;color:var(--secondary)}
-  .steps li{display:flex;gap:8px;padding:2px 0}
-  .steps li b{font-weight:400;color:var(--label)}
-  .steps li em{font-style:normal;margin-left:auto;font-variant-numeric:tabular-nums}
+  @media (prefers-reduced-motion:reduce){.spinner{animation:none}.track i{transition:none}}
+
+  /* 読み取り結果 */
+  .item{display:flex;align-items:center;gap:12px;padding:10px 12px;position:relative}
+  .item+.item::before{content:"";position:absolute;top:0;left:12px;right:0;height:.5px;background:var(--sep)}
+  .item img{width:46px;height:60px;object-fit:cover;border-radius:8px;background:var(--fill);flex:0 0 auto}
+  .fields{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+  .fields input[type=date]{border:none;background:none;font:inherit;font-size:13px;color:var(--secondary);padding:0;width:100%}
+  .fields .amtwrap{display:flex;align-items:baseline;gap:2px}
+  .fields .amtwrap span{font-size:15px;font-weight:600}
+  .fields input[type=number]{border:none;background:none;font:inherit;font-size:20px;font-weight:600;
+    color:var(--label);padding:0;width:100%;font-variant-numeric:tabular-nums}
+  .fields input:focus{outline:none}
+  .item .st{font-size:12px;color:var(--secondary);flex:0 0 auto;text-align:right;min-width:52px}
+  .item .st.low{color:var(--orange)}
+  .item .st.ng{color:var(--red)}
+  .item .x{background:none;border:none;color:var(--secondary);font-size:17px;padding:4px;cursor:pointer;flex:0 0 auto}
+  .item.busy{opacity:.6}
 
   .mnav{display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 16px;border-bottom:.5px solid var(--sep)}
   .mnav b{font-size:15px;font-weight:600}
@@ -106,13 +106,9 @@
   .sheet.on{transform:translateY(0)}
   .grab{width:36px;height:5px;border-radius:3px;background:var(--tertiary);margin:0 auto 10px}
   .sheet h2{font-size:20px;font-weight:600;margin:4px 4px 14px}
-  .sheet input{border:none;background:none;font:inherit;color:var(--label);flex:1;min-width:0;padding:0}
-  .sheet input[type=date],.sheet input[type=number]{text-align:right;font-variant-numeric:tabular-nums}
-  .sheet input[type=number]{font-size:22px;font-weight:600}
-  .sheet input[type=url],.sheet input[type=password]{font-size:15px}
+  .sheet input{border:none;background:none;font:inherit;font-size:15px;color:var(--label);flex:1;min-width:0;padding:0}
   .sheet input:focus{outline:none}
   .conf{font-size:13px;padding:10px 16px;color:var(--secondary)}
-  .conf.low{color:var(--orange)}
   .status{font-size:13px;color:var(--secondary);text-align:center;padding:16px 0 0}
   .status.warn{color:var(--orange)}
 </style>
@@ -121,36 +117,26 @@
 <div class="wrap">
   <h1>レシート</h1>
 
-  <div class="seg" role="tablist">
-    <button id="tabLive" role="tab" aria-selected="true">かざす</button>
-    <button id="tabShot" role="tab" aria-selected="false">撮影する</button>
+  <div class="dropzone" id="pick">
+    <div class="big">レシートを撮る / 選ぶ</div>
+    <div class="sm">複数枚まとめて選べます</div>
   </div>
-
-  <section id="paneLive">
-    <div class="stage">
-      <video id="cam" playsinline muted></video>
-      <div class="frame" id="frame" hidden><i></i><i></i><i></i><i></i></div>
-      <div class="beam" id="beam" hidden></div>
-      <p class="hint" id="camHint">レシート全体が枠に入るようにかざしてください</p>
-    </div>
-    <button class="primary" id="liveBtn">読み取りを開始</button>
-    <button class="linkbtn" id="toManual">手入力で記録する</button>
-  </section>
-
-  <section id="paneShot" hidden>
-    <div class="stage"><img id="shotPreview" alt=""><p class="hint" id="shotHint">ブレて読めないときは、静止画で読み取ります</p></div>
-    <button class="primary" id="shotBtn">写真を撮る / 選ぶ</button>
-    <input type="file" id="file" accept="image/*" capture="environment">
-    <button class="linkbtn" id="toManual2">手入力で記録する</button>
-  </section>
+  <input type="file" id="file" accept="image/*" multiple>
+  <button class="linkbtn" id="toManual">手入力で1件追加</button>
 
   <div class="progress" id="prog">
-    <div class="ptop"><div class="spinner"></div><b id="pTitle">準備中</b><span id="pTime">0.0s</span></div>
+    <div class="ptop"><div class="spinner"></div><b id="pTitle">解析中</b><span id="pTime">0.0s</span></div>
     <div class="track"><i id="pBar"></i></div>
-    <ul class="steps" id="pSteps"></ul>
   </div>
 
-  <p class="group-label">支出</p>
+  <div id="queueBox" hidden>
+    <p class="group-label"><span>読み取り結果</span><span id="qCount"></span></p>
+    <div class="card" id="queue"></div>
+    <button class="primary" id="saveAll">まとめて記録する</button>
+    <button class="secondary" id="clearAll">すべて破棄</button>
+  </div>
+
+  <p class="group-label"><span>支出</span></p>
   <div class="card">
     <div class="mnav">
       <button id="prevM" aria-label="前の月">‹</button><b id="mLabel">-</b><button id="nextM" aria-label="次の月">›</button>
@@ -159,10 +145,10 @@
     <div class="bars" id="bars"></div>
   </div>
 
-  <p class="group-label">記録</p>
+  <p class="group-label"><span>記録</span></p>
   <div class="card" id="list"></div>
 
-  <p class="group-label">設定</p>
+  <p class="group-label"><span>設定</span></p>
   <div class="card">
     <div class="row tap" id="openSettings"><span class="grow">パスワード</span><span class="value" id="syncState">未設定</span><span class="value">›</span></div>
     <div class="row"><span class="grow">今日の読み取り</span><span class="value" id="quotaState">-</span></div>
@@ -173,25 +159,10 @@
 </div>
 
 <div class="scrim" id="scrim"></div>
-
-<div class="sheet" id="sheetConfirm">
-  <div class="grab"></div>
-  <h2>読み取り結果</h2>
-  <div class="card">
-    <div class="row"><span class="grow">日付</span><input type="date" id="fDate"></div>
-    <div class="row"><span class="grow">合計</span><span class="value">¥</span><input type="number" id="fAmount" inputmode="numeric" placeholder="0"></div>
-  </div>
-  <p class="conf" id="confNote"></p>
-  <button class="primary" id="save">記録する</button>
-  <button class="secondary" id="cancel">やめる</button>
-</div>
-
 <div class="sheet" id="sheetSettings">
   <div class="grab"></div>
   <h2>パスワード</h2>
-  <div class="card">
-    <div class="row"><input type="password" id="secret" placeholder="パスワード（APP_SECRET）" autocomplete="current-password"></div>
-  </div>
+  <div class="card"><div class="row"><input type="password" id="secret" placeholder="パスワード（APP_SECRET）" autocomplete="current-password"></div></div>
   <p class="conf">この端末にのみ保存され、次回からは入力不要です。APIキーはサーバー側にあり、アプリからは見えません。</p>
   <button class="primary" id="saveUrl">保存して接続</button>
   <button class="secondary" id="closeSettings">閉じる</button>
@@ -202,21 +173,28 @@
 'use strict';
 /* ▼ここだけ書き換える：デプロイしたGASウェブアプリのURL（/exec）▼
    ※このURLは公開されます。認証はパスワード側で行うため、URL自体は秘密にしません */
-var GAS_URL='https://script.google.com/macros/s/AKfycbwtgBc2BkoMdbWwYEB32zixldCVj10xQp2kX01QCoYZUGYLmz2IafiQdPMfUw_E0y42/exec';
+var GAS_URL='https://script.google.com/macros/s/XXXXXXXXXXXXXXXX/exec';
+
+/* 速度の調整つまみ */
+var BATCH=4;        // 1リクエストに載せる枚数（Code.gsのMAX_IMAGESと揃える）
+var PARALLEL=2;     // 同時に投げるリクエスト数
+var IMG_W=1000;     // 送信する画像の横幅
+var IMG_Q=0.7;      // JPEG品質
 
 var $=function(id){return document.getElementById(id)};
 var K_SEC='rc_secret',K_REC='rc_records';
 var secret=localStorage.getItem(K_SEC)||'';
 var records=[];try{records=JSON.parse(localStorage.getItem(K_REC))||[]}catch(e){}
 var cursor=new Date();cursor.setDate(1);
-var stream=null,scanning=false,timer=null,t0=0,attempts=0,MAX_TRY=6;
+var queue=[],seq=0,t0=0,running=false;
 
 function yen(n){return '¥'+Number(n||0).toLocaleString('ja-JP')}
 function ym(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
 function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function status(m,warn){$('statusMsg').textContent=m||'';$('statusMsg').className='status'+(warn?' warn':'')}
+function cache(){localStorage.setItem(K_REC,JSON.stringify(records))}
 
-/* ---------- サーバー通信（合言葉は毎回body内・HTTPSのみ） ---------- */
+/* ---------- サーバー通信 ---------- */
 function api(action,extra){
   if(!secret)return Promise.reject(new Error('設定でパスワードを入力してください'));
   var body={action:action,secret:secret};
@@ -230,116 +208,151 @@ function api(action,extra){
     });
 }
 
+/* ---------- 画像 ---------- */
+function fileToImage(f){
+  return new Promise(function(res,rej){
+    var fr=new FileReader();
+    fr.onload=function(){
+      var img=new Image();
+      img.onload=function(){res(img)};
+      img.onerror=function(){rej(new Error('画像を開けません'))};
+      img.src=fr.result;
+    };
+    fr.onerror=function(){rej(new Error('ファイルを読めません'))};
+    fr.readAsDataURL(f);
+  });
+}
+function shrink(img,w,q){
+  var c=document.createElement('canvas');
+  var sc=Math.min(1,w/img.naturalWidth);
+  c.width=Math.round(img.naturalWidth*sc);c.height=Math.round(img.naturalHeight*sc);
+  c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+  return c.toDataURL('image/jpeg',q);
+}
+
 /* ---------- 進捗 ---------- */
-var steps=[];
-function progOpen(title){steps=[];$('pSteps').innerHTML='';$('pBar').style.width='0';
-  $('pTitle').textContent=title;$('prog').classList.add('on');t0=Date.now();tick()}
+function progOpen(){$('pBar').style.width='0';$('prog').classList.add('on');t0=Date.now();tick()}
 function tick(){if(!$('prog').classList.contains('on'))return;
   $('pTime').textContent=((Date.now()-t0)/1000).toFixed(1)+'s';requestAnimationFrame(tick)}
-function progStep(text,pct){
-  $('pTitle').textContent=text;
-  if(pct!=null)$('pBar').style.width=Math.min(100,pct)+'%';
-  steps.push({t:text,s:((Date.now()-t0)/1000).toFixed(1)+'s'});
-  $('pSteps').innerHTML=steps.slice(-4).map(function(x){return '<li><b>'+x.t+'</b><em>'+x.s+'</em></li>'}).join('');
-}
+function progSet(text,pct){$('pTitle').textContent=text;$('pBar').style.width=Math.min(100,pct)+'%'}
 function progClose(){$('prog').classList.remove('on')}
 
-/* ---------- 画像 ---------- */
-function toBase64(src,maxW){
-  var c=document.createElement('canvas');
-  var w=src.videoWidth||src.naturalWidth,h=src.videoHeight||src.naturalHeight;
-  var sc=Math.min(1,(maxW||1100)/w);
-  c.width=Math.round(w*sc);c.height=Math.round(h*sc);
-  c.getContext('2d').drawImage(src,0,0,c.width,c.height);
-  return c.toDataURL('image/jpeg',0.75).split(',')[1];
-}
-function quotaLabel(j){
-  if(j&&j.limit)$('quotaState').textContent=j.used+' / '+j.limit+'回';
-}
-
-/* ---------- かざす ---------- */
-function startLive(){
+/* ---------- 取り込み → 一括解析 ---------- */
+function onFiles(files){
   if(!secret){status('先に設定でパスワードを入力してください',true);openSheet($('sheetSettings'));return}
-  navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920}}})
-    .then(function(s){
-      stream=s;$('cam').srcObject=s;$('cam').play();
-      $('camHint').hidden=true;$('frame').hidden=false;$('beam').hidden=false;
-      scanning=true;attempts=0;
-      $('liveBtn').textContent='読み取りを停止';$('liveBtn').classList.add('stop');
-      progOpen('カメラを起動しました');
-      setTimeout(loop,1000);
-    })
-    .catch(function(){status('カメラを使えません。「撮影する」に切り替えました',true);selectTab('shot')});
-}
-function stopLive(keepProg){
-  scanning=false;clearTimeout(timer);
-  if(stream){stream.getTracks().forEach(function(t){t.stop()});stream=null}
-  $('cam').srcObject=null;
-  $('camHint').hidden=false;$('frame').hidden=true;$('beam').hidden=true;
-  $('liveBtn').textContent='読み取りを開始';$('liveBtn').classList.remove('stop');
-  if(!keepProg)progClose();
-}
-function loop(){
-  if(!scanning)return;
-  attempts++;
-  progStep('レシートを解析中（'+attempts+'/'+MAX_TRY+'）',attempts/MAX_TRY*90);
-  var b64;
-  try{b64=toBase64($('cam'),1100)}catch(e){timer=setTimeout(loop,700);return}
-  api('scan',{image:b64}).then(function(j){
-    if(!scanning)return;
-    quotaLabel(j);
-    if(j.found&&j.total>0){
-      progStep('読み取れました',100);stopLive(true);setTimeout(progClose,600);
-      if(navigator.vibrate)navigator.vibrate(30);
-      showConfirm(j);
-    }else if(attempts>=MAX_TRY){
-      progStep('読み取れませんでした',100);stopLive(true);setTimeout(progClose,1200);
-      status('うまく読めません。「撮影する」で静止画を試してください',true);
-    }else{
-      progStep('ピントと明るさを調整してください',attempts/MAX_TRY*90);
-      timer=setTimeout(loop,500);
+  if(running){status('前の読み取りが終わってから追加してください',true);return}
+  var list=Array.prototype.slice.call(files).slice(0,20);
+  if(!list.length)return;
+  running=true;progOpen();progSet('画像を準備中（'+list.length+'枚）',5);
+
+  var added=[];
+  Promise.all(list.map(function(f){
+    return fileToImage(f).then(function(img){
+      var big=shrink(img,IMG_W,IMG_Q), thumb=shrink(img,140,0.6);
+      var item={id:'q'+(++seq),thumb:thumb,b64:big.split(',')[1],date:today(),amount:'',state:'wait'};
+      queue.push(item);added.push(item);
+    }).catch(function(){});
+  })).then(function(){
+    renderQueue();
+    var groups=[];
+    for(var i=0;i<added.length;i+=BATCH)groups.push(added.slice(i,i+BATCH));
+    var done=0,total=groups.length,errs=0;
+    progSet('レシートを解析中（0/'+added.length+'枚）',10);
+
+    var next=0;
+    function runOne(){
+      if(next>=groups.length)return Promise.resolve();
+      var g=groups[next++];
+      g.forEach(function(it){it.state='busy'});renderQueue();
+      return api('scan',{images:g.map(function(it){return it.b64})}).then(function(j){
+        if(j.limit)$('quotaState').textContent=j.used+' / '+j.limit+'回';
+        (j.results||[]).forEach(function(r,i){
+          var it=g[i];if(!it)return;
+          if(r.found&&r.total>0){
+            it.amount=r.total;it.date=r.date||it.date;
+            it.state=r.confidence==='low'?'low':'ok';
+          }else{it.state='ng'}
+        });
+      }).catch(function(e){
+        errs++;g.forEach(function(it){it.state='ng'});
+        status(e.message,true);
+      }).then(function(){
+        done++;
+        progSet('レシートを解析中（'+Math.min(added.length,done*BATCH)+'/'+added.length+'枚）',10+done/total*90);
+        renderQueue();
+        return runOne();
+      });
     }
+    var lanes=[];
+    for(var p=0;p<Math.min(PARALLEL,groups.length);p++)lanes.push(runOne());
+    return Promise.all(lanes).then(function(){
+      progSet('完了',100);setTimeout(progClose,500);
+      running=false;renderQueue();
+      var ok=added.filter(function(it){return it.amount}).length;
+      status(ok+'/'+added.length+'枚を読み取りました'+(errs?'（'+errs+'件エラー）':'')+' — 金額を確認して記録してください');
+    });
   }).catch(function(e){
-    if(!scanning)return;
-    progStep('停止: '+e.message,100);stopLive(true);setTimeout(progClose,2000);
-    status(e.message,true);
+    running=false;progClose();status(e.message,true);
   });
 }
 
-/* ---------- 撮影 ---------- */
-function readStill(dataUrl){
-  var img=new Image();
-  img.onload=function(){
-    $('shotPreview').src=dataUrl;$('shotHint').hidden=true;
-    progOpen('画像を準備中');progStep('画像を準備中',15);
-    var b64;
-    try{b64=toBase64(img,1400)}catch(e){progStep('画像を処理できません',100);setTimeout(progClose,1500);return}
-    progStep('レシートを解析中',50);
-    api('scan',{image:b64}).then(function(j){
-      quotaLabel(j);
-      if(j.found&&j.total>0){progStep('読み取れました',100);setTimeout(progClose,600);showConfirm(j)}
-      else{progStep('合計を判別できませんでした',100);setTimeout(progClose,1400);showConfirm(null)}
-    }).catch(function(e){
-      progStep('エラー: '+e.message,100);setTimeout(progClose,2000);status(e.message,true);
-    });
-  };
-  img.src=dataUrl;
+/* ---------- 読み取り結果の表示 ---------- */
+function renderQueue(){
+  $('queueBox').hidden=!queue.length;
+  $('qCount').textContent=queue.length?queue.length+'件':'';
+  $('queue').innerHTML=queue.map(function(it){
+    var st=it.state==='busy'?'<span class="st">解析中</span>'
+      :it.state==='ng'?'<span class="st ng">未検出</span>'
+      :it.state==='low'?'<span class="st low">要確認</span>':'<span class="st"></span>';
+    return '<div class="item'+(it.state==='busy'?' busy':'')+'" data-id="'+it.id+'">'+
+      (it.thumb?'<img src="'+it.thumb+'" alt="">':'<img alt="">')+
+      '<div class="fields">'+
+        '<input type="date" value="'+it.date+'" data-f="date">'+
+        '<div class="amtwrap"><span>¥</span><input type="number" inputmode="numeric" placeholder="0" value="'+(it.amount||'')+'" data-f="amount"></div>'+
+      '</div>'+st+
+      '<button class="x" data-x="1">✕</button></div>';
+  }).join('');
+  var n=queue.filter(function(it){return Number(it.amount)>0}).length;
+  $('saveAll').textContent=n?n+'件をまとめて記録する':'記録する';
+  $('saveAll').disabled=!n;
 }
+$('queue').addEventListener('input',function(e){
+  var box=e.target.closest('.item');if(!box)return;
+  var it=queue.filter(function(q){return q.id===box.dataset.id})[0];if(!it)return;
+  if(e.target.dataset.f==='amount'){it.amount=e.target.value;
+    var n=queue.filter(function(q){return Number(q.amount)>0}).length;
+    $('saveAll').textContent=n?n+'件をまとめて記録する':'記録する';$('saveAll').disabled=!n;}
+  if(e.target.dataset.f==='date')it.date=e.target.value;
+});
+$('queue').addEventListener('click',function(e){
+  if(!e.target.dataset.x)return;
+  var box=e.target.closest('.item');
+  queue=queue.filter(function(q){return q.id!==box.dataset.id});
+  renderQueue();
+});
 
-/* ---------- シート ---------- */
-function openSheet(el){$('scrim').classList.add('on');el.classList.add('on')}
-function closeSheets(){$('scrim').classList.remove('on');$('sheetConfirm').classList.remove('on');$('sheetSettings').classList.remove('on')}
-function showConfirm(r){
-  $('fDate').value=(r&&r.date)||today();
-  $('fAmount').value=(r&&r.total)||'';
-  var n=$('confNote');
-  if(!r||!r.total){n.textContent='合計を読み取れませんでした。金額を入力してください';n.className='conf low'}
-  else if(r.confidence==='low'){n.textContent='読み取り精度が低い可能性があります。金額を確認してください';n.className='conf low'}
-  else{n.textContent='内容を確認して記録してください';n.className='conf'}
-  openSheet($('sheetConfirm'));
-}
+$('saveAll').onclick=function(){
+  var picked=queue.filter(function(it){return Number(it.amount)>0&&it.date});
+  if(!picked.length)return;
+  var recs=picked.map(function(it){
+    return {id:String(Date.now())+Math.floor(Math.random()*10000),date:it.date,amount:Math.round(Number(it.amount))};
+  });
+  records=records.concat(recs);cache();
+  var last=recs[recs.length-1].date;
+  cursor=new Date(+last.slice(0,4),+last.slice(5,7)-1,1);
+  queue=[];renderQueue();render();
+  status(recs.length+'件を記録しました');
+  api('addMany',{records:recs}).catch(function(e){
+    status('サーバーに送れませんでした（端末には保存済み）: '+e.message,true);
+  });
+};
+$('clearAll').onclick=function(){queue=[];renderQueue()};
+$('toManual').onclick=function(){
+  queue.push({id:'q'+(++seq),thumb:'',b64:null,date:today(),amount:'',state:'ok'});
+  renderQueue();
+};
 
-/* ---------- 表示 ---------- */
+/* ---------- 月別表示 ---------- */
 function render(){
   var key=ym(cursor);
   $('mLabel').textContent=cursor.getFullYear()+'年'+(cursor.getMonth()+1)+'月';
@@ -364,58 +377,32 @@ function render(){
            '<button class="del" data-id="'+r.id+'">削除</button></div>';
   }).join(''):'<p class="empty">この月の記録はまだありません</p>';
 }
-function cache(){localStorage.setItem(K_REC,JSON.stringify(records))}
 function pull(){
   if(!secret){$('syncState').textContent='未設定';status('パスワードを入力すると同期します');return}
   api('list').then(function(j){
     records=j.records;cache();render();
     $('syncState').textContent='接続済み';status('スプレッドシートと同期しました');
-  }).catch(function(e){
-    $('syncState').textContent='エラー';status(e.message,true);
-  });
+  }).catch(function(e){$('syncState').textContent='エラー';status(e.message,true)});
 }
 
-/* ---------- 操作 ---------- */
-function selectTab(which){
-  var live=which==='live';
-  $('tabLive').setAttribute('aria-selected',live);$('tabShot').setAttribute('aria-selected',!live);
-  $('paneLive').hidden=!live;$('paneShot').hidden=live;
-  if(!live)stopLive();
-}
-$('tabLive').onclick=function(){selectTab('live')};
-$('tabShot').onclick=function(){selectTab('shot')};
-$('liveBtn').onclick=function(){scanning?stopLive():startLive()};
-$('shotBtn').onclick=function(){$('file').click()};
-$('file').onchange=function(e){
-  var f=e.target.files[0];if(!f)return;
-  var fr=new FileReader();fr.onload=function(){readStill(fr.result)};fr.readAsDataURL(f);
-  e.target.value='';
-};
-$('toManual').onclick=$('toManual2').onclick=function(){showConfirm(null)};
-$('cancel').onclick=closeSheets;
+/* ---------- その他操作 ---------- */
+function openSheet(el){$('scrim').classList.add('on');el.classList.add('on')}
+function closeSheets(){$('scrim').classList.remove('on');$('sheetSettings').classList.remove('on')}
+$('pick').onclick=function(){$('file').click()};
+$('file').onchange=function(e){onFiles(e.target.files);e.target.value=''};
 $('scrim').onclick=closeSheets;
-$('save').onclick=function(){
-  var d=$('fDate').value,a=parseInt($('fAmount').value,10);
-  if(!d||!a||a<=0){status('日付と金額を入力してください',true);return}
-  var rec={id:String(Date.now())+Math.floor(Math.random()*1000),date:d,amount:a};
-  records.push(rec);cache();
-  cursor=new Date(+d.slice(0,4),+d.slice(5,7)-1,1);
-  render();closeSheets();status('記録しました');
-  api('add',rec).catch(function(e){status('サーバーに送れませんでした（端末には保存済み）: '+e.message,true)});
+$('openSettings').onclick=function(){$('secret').value=secret;openSheet($('sheetSettings'))};
+$('closeSettings').onclick=closeSheets;
+$('saveUrl').onclick=function(){
+  secret=$('secret').value.trim();
+  if(!secret){status('パスワードを入力してください',true);return}
+  localStorage.setItem(K_SEC,secret);closeSheets();pull();
 };
 $('list').onclick=function(e){
   var b=e.target.closest('.del');if(!b)return;
   var id=b.dataset.id;
   records=records.filter(function(r){return String(r.id)!==id});cache();render();
   api('delete',{id:id}).catch(function(){status('サーバー側の削除に失敗しました',true)});
-};
-$('openSettings').onclick=function(){$('secret').value=secret;openSheet($('sheetSettings'))};
-$('closeSettings').onclick=closeSheets;
-$('saveUrl').onclick=function(){
-  secret=$('secret').value.trim();
-  if(!secret){status('パスワードを入力してください',true);return}
-  localStorage.setItem(K_SEC,secret);
-  closeSheets();pull();
 };
 $('doExport').onclick=function(){
   var csv='date,amount\n'+records.slice().sort(function(a,b){return a.date<b.date?-1:1})
@@ -427,7 +414,7 @@ $('doExport').onclick=function(){
 $('prevM').onclick=function(){cursor.setMonth(cursor.getMonth()-1);render()};
 $('nextM').onclick=function(){cursor.setMonth(cursor.getMonth()+1);render()};
 
-render();pull();
+renderQueue();render();pull();
 })();
 </script>
 </body>
