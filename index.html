@@ -37,22 +37,29 @@
   .row .grow{flex:1;min-width:0}
   .value{color:var(--secondary);font-variant-numeric:tabular-nums}
   .tap{cursor:pointer}
-
   .primary,.secondary{width:100%;border:none;font:inherit;font-size:17px;font-weight:600;
     height:50px;border-radius:14px;cursor:pointer;margin-top:12px}
   .primary{background:var(--blue);color:#fff}
   .secondary{background:var(--fill);color:var(--blue)}
   .primary:disabled{opacity:.45}
+  .danger{background:none;border:none;color:var(--red);font:inherit;font-size:17px;width:100%;padding:14px 0 0;cursor:pointer}
   .linkbtn{display:block;width:100%;background:none;border:none;font:inherit;font-size:15px;
     color:var(--blue);padding:12px 0 0;cursor:pointer}
   input[type=file]{display:none}
 
-  .dropzone{
-    background:var(--card);border-radius:16px;padding:26px 20px;text-align:center;cursor:pointer;
-    border:1px dashed var(--tertiary)
-  }
+  /* 撮影 */
+  .dropzone{background:var(--card);border-radius:16px;padding:24px 20px;text-align:center;cursor:pointer}
   .dropzone .big{font-size:17px;font-weight:600}
   .dropzone .sm{font-size:13px;color:var(--secondary);margin-top:4px}
+  .stage{position:relative;background:#000;border-radius:16px;overflow:hidden;aspect-ratio:3/4}
+  .stage video{width:100%;height:100%;object-fit:cover;display:block}
+  .shutterbar{position:absolute;left:0;right:0;bottom:0;padding:14px;display:flex;align-items:center;
+    justify-content:space-between;background:linear-gradient(transparent,rgba(0,0,0,.55))}
+  .shutter{width:62px;height:62px;border-radius:50%;background:#fff;border:4px solid rgba(255,255,255,.5);cursor:pointer}
+  .shutterbar button.txt{background:none;border:none;color:#fff;font:inherit;font-size:15px;cursor:pointer;min-width:64px}
+  .tray{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 2px}
+  .tray img{width:52px;height:68px;object-fit:cover;border-radius:8px;flex:0 0 auto}
+  .tray .cnt{font-size:13px;color:var(--secondary);align-self:center;flex:0 0 auto;padding:0 4px}
 
   .progress{display:none;margin-top:12px;background:var(--card);border-radius:var(--radius);padding:14px 16px}
   .progress.on{display:block}
@@ -67,22 +74,25 @@
   @media (prefers-reduced-motion:reduce){.spinner{animation:none}.track i{transition:none}}
 
   /* 読み取り結果 */
-  .item{display:flex;align-items:center;gap:12px;padding:10px 12px;position:relative}
+  .item{display:flex;align-items:center;gap:10px;padding:10px 12px;position:relative}
   .item+.item::before{content:"";position:absolute;top:0;left:12px;right:0;height:.5px;background:var(--sep)}
-  .item img{width:46px;height:60px;object-fit:cover;border-radius:8px;background:var(--fill);flex:0 0 auto}
-  .fields{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-  .fields input[type=date]{border:none;background:none;font:inherit;font-size:13px;color:var(--secondary);padding:0;width:100%}
+  .item img{width:44px;height:58px;object-fit:cover;border-radius:8px;background:var(--fill);flex:0 0 auto}
+  .fields{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+  .fields input{border:none;background:none;font:inherit;color:var(--label);padding:0;width:100%}
+  .fields input:focus{outline:none}
+  .fields .r1{display:flex;align-items:baseline;gap:6px}
+  .fields input[type=date]{font-size:12px;color:var(--secondary);flex:0 0 auto;width:105px}
+  .fields .st{font-size:11px;color:var(--secondary)}
+  .fields .st.low{color:var(--orange)}
+  .fields .st.ng{color:var(--red)}
   .fields .amtwrap{display:flex;align-items:baseline;gap:2px}
   .fields .amtwrap span{font-size:15px;font-weight:600}
-  .fields input[type=number]{border:none;background:none;font:inherit;font-size:20px;font-weight:600;
-    color:var(--label);padding:0;width:100%;font-variant-numeric:tabular-nums}
-  .fields input:focus{outline:none}
-  .item .st{font-size:12px;color:var(--secondary);flex:0 0 auto;text-align:right;min-width:52px}
-  .item .st.low{color:var(--orange)}
-  .item .st.ng{color:var(--red)}
+  .fields input[type=number]{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+  .fields input.memo{font-size:13px;color:var(--secondary)}
   .item .x{background:none;border:none;color:var(--secondary);font-size:17px;padding:4px;cursor:pointer;flex:0 0 auto}
-  .item.busy{opacity:.6}
+  .item.busy{opacity:.55}
 
+  /* 支出 */
   .mnav{display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 16px;border-bottom:.5px solid var(--sep)}
   .mnav b{font-size:15px;font-weight:600}
   .mnav button{background:none;border:none;color:var(--blue);font-size:17px;padding:6px 12px;cursor:pointer}
@@ -94,8 +104,31 @@
   .bars i{display:block;background:var(--fill);border-radius:4px;min-height:3px}
   .bars i.on{background:var(--blue)}
   .bars small{font-size:11px;color:var(--secondary);text-align:center;margin-top:6px}
-  .amount{font-variant-numeric:tabular-nums;font-weight:500}
-  .del{background:none;border:none;color:var(--red);font-size:15px;padding:4px 0 4px 8px;cursor:pointer}
+
+  /* カレンダー */
+  .cal{padding:10px 8px 14px}
+  .cal .wd{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px}
+  .cal .wd span{text-align:center;font-size:11px;color:var(--secondary)}
+  .cal .wd span:first-child{color:var(--red)}
+  .cal .wd span:last-child{color:var(--blue)}
+  .cal .days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .cal .d{border:none;background:none;font:inherit;color:var(--label);border-radius:8px;
+    padding:4px 1px 5px;min-height:44px;display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer}
+  .cal .d.blank{visibility:hidden}
+  .cal .d .n{font-size:13px;font-variant-numeric:tabular-nums}
+  .cal .d .v{font-size:9px;color:var(--blue);font-variant-numeric:tabular-nums;line-height:1.1}
+  .cal .d.today .n{font-weight:700}
+  .cal .d.on{background:var(--blue);color:#fff}
+  .cal .d.on .v{color:rgba(255,255,255,.9)}
+  .cal .d.on .n{font-weight:700}
+
+  .rec{display:flex;align-items:center;gap:10px;padding:11px 16px;position:relative;cursor:pointer}
+  .rec+.rec::before{content:"";position:absolute;top:0;left:16px;right:0;height:.5px;background:var(--sep)}
+  .rec .d{font-size:12px;color:var(--secondary);flex:0 0 46px;font-variant-numeric:tabular-nums}
+  .rec .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px}
+  .rec .t.none{color:var(--tertiary)}
+  .rec .a{font-variant-numeric:tabular-nums;font-weight:500;flex:0 0 auto}
+  .rec .chev{color:var(--tertiary);font-size:15px;flex:0 0 auto}
   .empty{padding:22px 16px;text-align:center;color:var(--secondary);font-size:15px}
 
   .scrim{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .3s;z-index:10}
@@ -106,7 +139,8 @@
   .sheet.on{transform:translateY(0)}
   .grab{width:36px;height:5px;border-radius:3px;background:var(--tertiary);margin:0 auto 10px}
   .sheet h2{font-size:20px;font-weight:600;margin:4px 4px 14px}
-  .sheet input{border:none;background:none;font:inherit;font-size:15px;color:var(--label);flex:1;min-width:0;padding:0}
+  .sheet input{border:none;background:none;font:inherit;font-size:15px;color:var(--label);flex:1;min-width:0;padding:0;text-align:right}
+  .sheet input[type=password]{text-align:left}
   .sheet input:focus{outline:none}
   .conf{font-size:13px;padding:10px 16px;color:var(--secondary)}
   .status{font-size:13px;color:var(--secondary);text-align:center;padding:16px 0 0}
@@ -117,12 +151,27 @@
 <div class="wrap">
   <h1>レシート</h1>
 
-  <div class="dropzone" id="pick">
-    <div class="big">レシートを撮る / 選ぶ</div>
-    <div class="sm">複数枚まとめて選べます</div>
+  <div id="pickBox">
+    <div class="dropzone tap" id="openCam">
+      <div class="big">カメラで撮る</div>
+      <div class="sm">続けて何枚でも撮影 → まとめてアップロード</div>
+    </div>
+    <button class="secondary" id="pickLib">ライブラリから選ぶ</button>
+    <input type="file" id="file" accept="image/*" multiple>
+    <button class="linkbtn" id="toManual">手入力で1件追加</button>
   </div>
-  <input type="file" id="file" accept="image/*" multiple>
-  <button class="linkbtn" id="toManual">手入力で1件追加</button>
+
+  <div id="camBox" hidden>
+    <div class="stage">
+      <video id="cam" playsinline muted></video>
+      <div class="shutterbar">
+        <button class="txt" id="camClose">閉じる</button>
+        <button class="shutter" id="shutter" aria-label="撮影"></button>
+        <button class="txt" id="camDone">読み取る</button>
+      </div>
+    </div>
+    <div class="tray" id="tray"></div>
+  </div>
 
   <div class="progress" id="prog">
     <div class="ptop"><div class="spinner"></div><b id="pTitle">解析中</b><span id="pTime">0.0s</span></div>
@@ -138,15 +187,19 @@
 
   <p class="group-label"><span>支出</span></p>
   <div class="card">
-    <div class="mnav">
-      <button id="prevM" aria-label="前の月">‹</button><b id="mLabel">-</b><button id="nextM" aria-label="次の月">›</button>
-    </div>
+    <div class="mnav"><button id="prevM" aria-label="前の月">‹</button><b id="mLabel">-</b><button id="nextM" aria-label="次の月">›</button></div>
     <div class="total"><div class="big" id="mTotal">¥0</div><div class="sub" id="mSub">0件</div></div>
     <div class="bars" id="bars"></div>
   </div>
 
-  <p class="group-label"><span>記録</span></p>
-  <div class="card" id="list"></div>
+  <p class="group-label"><span>記録</span><span id="filterNote"></span></p>
+  <div class="card">
+    <div class="cal">
+      <div class="wd"><span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span></div>
+      <div class="days" id="cal"></div>
+    </div>
+  </div>
+  <div class="card" id="list" style="margin-top:10px"></div>
 
   <p class="group-label"><span>設定</span></p>
   <div class="card">
@@ -159,42 +212,55 @@
 </div>
 
 <div class="scrim" id="scrim"></div>
+
+<div class="sheet" id="sheetEdit">
+  <div class="grab"></div>
+  <h2>記録を編集</h2>
+  <div class="card">
+    <div class="row"><span class="grow">日付</span><input type="date" id="eDate"></div>
+    <div class="row"><span class="grow">金額</span><span class="value">¥</span><input type="number" id="eAmount" inputmode="numeric"></div>
+    <div class="row"><span class="grow">内容</span><input type="text" id="eItems" placeholder="食料品ほか"></div>
+  </div>
+  <button class="primary" id="eSave">保存する</button>
+  <button class="secondary" id="eCancel">やめる</button>
+  <button class="danger" id="eDelete">この記録を削除</button>
+</div>
+
 <div class="sheet" id="sheetSettings">
   <div class="grab"></div>
   <h2>パスワード</h2>
   <div class="card"><div class="row"><input type="password" id="secret" placeholder="パスワード（APP_SECRET）" autocomplete="current-password"></div></div>
   <p class="conf">この端末にのみ保存され、次回からは入力不要です。APIキーはサーバー側にあり、アプリからは見えません。</p>
-  <button class="primary" id="saveUrl">保存して接続</button>
+  <button class="primary" id="saveSecret">保存して接続</button>
   <button class="secondary" id="closeSettings">閉じる</button>
 </div>
 
 <script>
 (function(){
 'use strict';
-/* ▼ここだけ書き換える：デプロイしたGASウェブアプリのURL（/exec）▼
-   ※このURLは公開されます。認証はパスワード側で行うため、URL自体は秘密にしません */
-var GAS_URL='https://script.google.com/macros/s/AKfycbwtgBc2BkoMdbWwYEB32zixldCVj10xQp2kX01QCoYZUGYLmz2IafiQdPMfUw_E0y42/exec';
+/* ▼ここだけ書き換える：デプロイしたGASウェブアプリのURL（/exec）▼ */
+var GAS_URL='https://script.google.com/macros/s/XXXXXXXXXXXXXXXX/exec';
 
 /* 速度の調整つまみ */
-var BATCH=4;        // 1リクエストに載せる枚数（Code.gsのMAX_IMAGESと揃える）
-var PARALLEL=2;     // 同時に投げるリクエスト数
-var IMG_W=1000;     // 送信する画像の横幅
-var IMG_Q=0.7;      // JPEG品質
+var BATCH=4, PARALLEL=2, IMG_W=1000, IMG_Q=0.7;
 
 var $=function(id){return document.getElementById(id)};
 var K_SEC='rc_secret',K_REC='rc_records';
 var secret=localStorage.getItem(K_SEC)||'';
 var records=[];try{records=JSON.parse(localStorage.getItem(K_REC))||[]}catch(e){}
 var cursor=new Date();cursor.setDate(1);
-var queue=[],seq=0,t0=0,running=false;
+var selDay=null, queue=[], shots=[], seq=0, t0=0, running=false, stream=null, editId=null;
 
 function yen(n){return '¥'+Number(n||0).toLocaleString('ja-JP')}
 function ym(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
-function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function ymd(y,m,d){return y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0')}
+function today(){var d=new Date();return ymd(d.getFullYear(),d.getMonth()+1,d.getDate())}
+function esc(s){return String(s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function status(m,warn){$('statusMsg').textContent=m||'';$('statusMsg').className='status'+(warn?' warn':'')}
 function cache(){localStorage.setItem(K_REC,JSON.stringify(records))}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
 
-/* ---------- サーバー通信 ---------- */
+/* ---------- 通信 ---------- */
 function api(action,extra){
   if(!secret)return Promise.reject(new Error('設定でパスワードを入力してください'));
   var body={action:action,secret:secret};
@@ -203,32 +269,76 @@ function api(action,extra){
     body:JSON.stringify(body),referrerPolicy:'no-referrer'})
     .then(function(r){return r.json()})
     .then(function(j){
-      if(!j.ok)throw new Error(j.error==='auth'?'パスワードが違います':j.error);
+      if(!j.ok){var e=new Error(j.error==='auth'?'パスワードが違います':j.error);e.busy=!!j.busy;throw e}
       return j;
     });
 }
 
 /* ---------- 画像 ---------- */
+function shrinkFrom(src,w,q){
+  var c=document.createElement('canvas');
+  var iw=src.videoWidth||src.naturalWidth, ih=src.videoHeight||src.naturalHeight;
+  var sc=Math.min(1,w/iw);
+  c.width=Math.round(iw*sc);c.height=Math.round(ih*sc);
+  c.getContext('2d').drawImage(src,0,0,c.width,c.height);
+  return c.toDataURL('image/jpeg',q);
+}
 function fileToImage(f){
   return new Promise(function(res,rej){
     var fr=new FileReader();
-    fr.onload=function(){
-      var img=new Image();
-      img.onload=function(){res(img)};
-      img.onerror=function(){rej(new Error('画像を開けません'))};
-      img.src=fr.result;
-    };
+    fr.onload=function(){var i=new Image();i.onload=function(){res(i)};i.onerror=function(){rej(new Error('画像を開けません'))};i.src=fr.result};
     fr.onerror=function(){rej(new Error('ファイルを読めません'))};
     fr.readAsDataURL(f);
   });
 }
-function shrink(img,w,q){
-  var c=document.createElement('canvas');
-  var sc=Math.min(1,w/img.naturalWidth);
-  c.width=Math.round(img.naturalWidth*sc);c.height=Math.round(img.naturalHeight*sc);
-  c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-  return c.toDataURL('image/jpeg',q);
+
+/* ---------- カメラ（連続撮影） ---------- */
+$('openCam').onclick=function(){
+  if(!secret){status('先に設定でパスワードを入力してください',true);openSheet($('sheetSettings'));return}
+  navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920}}})
+    .then(function(s){
+      stream=s;$('cam').srcObject=s;$('cam').play();
+      $('pickBox').hidden=true;$('camBox').hidden=false;renderTray();
+    })
+    .catch(function(){status('カメラを使えません。ライブラリから選んでください',true)});
+};
+function closeCam(){
+  if(stream){stream.getTracks().forEach(function(t){t.stop()});stream=null}
+  $('cam').srcObject=null;$('camBox').hidden=true;$('pickBox').hidden=false;
 }
+$('shutter').onclick=function(){
+  if(!stream)return;
+  var big=shrinkFrom($('cam'),IMG_W,IMG_Q), th=shrinkFrom($('cam'),140,0.6);
+  shots.push({b64:big.split(',')[1],thumb:th});
+  if(navigator.vibrate)navigator.vibrate(15);
+  renderTray();
+};
+$('camClose').onclick=function(){shots=[];closeCam();renderTray()};
+$('camDone').onclick=function(){
+  if(!shots.length){closeCam();return}
+  var batch=shots.slice();shots=[];closeCam();renderTray();
+  analyze(batch);
+};
+function renderTray(){
+  $('tray').innerHTML=shots.length
+    ? '<span class="cnt">'+shots.length+'枚</span>'+shots.map(function(s){return '<img src="'+s.thumb+'" alt="">'}).join('')
+    : '<span class="cnt">撮影した写真がここに並びます</span>';
+  $('camDone').textContent=shots.length?shots.length+'枚を読み取る':'読み取る';
+}
+
+/* ---------- ライブラリ ---------- */
+$('pickLib').onclick=function(){$('file').click()};
+$('file').onchange=function(e){
+  var files=Array.prototype.slice.call(e.target.files).slice(0,20);e.target.value='';
+  if(!files.length)return;
+  if(!secret){status('先に設定でパスワードを入力してください',true);openSheet($('sheetSettings'));return}
+  progOpen();progSet('画像を準備中（'+files.length+'枚）',5);
+  Promise.all(files.map(function(f){
+    return fileToImage(f).then(function(img){
+      return {b64:shrinkFrom(img,IMG_W,IMG_Q).split(',')[1],thumb:shrinkFrom(img,140,0.6)};
+    }).catch(function(){return null});
+  })).then(function(arr){analyze(arr.filter(Boolean))});
+};
 
 /* ---------- 進捗 ---------- */
 function progOpen(){$('pBar').style.width='0';$('prog').classList.add('on');t0=Date.now();tick()}
@@ -237,133 +347,141 @@ function tick(){if(!$('prog').classList.contains('on'))return;
 function progSet(text,pct){$('pTitle').textContent=text;$('pBar').style.width=Math.min(100,pct)+'%'}
 function progClose(){$('prog').classList.remove('on')}
 
-/* ---------- 取り込み → 一括解析 ---------- */
-function onFiles(files){
-  if(!secret){status('先に設定でパスワードを入力してください',true);openSheet($('sheetSettings'));return}
+/* ---------- 一括解析 ---------- */
+function analyze(shotList){
+  if(!shotList.length){progClose();return}
   if(running){status('前の読み取りが終わってから追加してください',true);return}
-  var list=Array.prototype.slice.call(files).slice(0,20);
-  if(!list.length)return;
-  running=true;progOpen();progSet('画像を準備中（'+list.length+'枚）',5);
+  running=true;if(!$('prog').classList.contains('on'))progOpen();
 
-  var added=[];
-  Promise.all(list.map(function(f){
-    return fileToImage(f).then(function(img){
-      var big=shrink(img,IMG_W,IMG_Q), thumb=shrink(img,140,0.6);
-      var item={id:'q'+(++seq),thumb:thumb,b64:big.split(',')[1],date:today(),amount:'',state:'wait'};
-      queue.push(item);added.push(item);
-    }).catch(function(){});
-  })).then(function(){
-    renderQueue();
-    var groups=[];
-    for(var i=0;i<added.length;i+=BATCH)groups.push(added.slice(i,i+BATCH));
-    var done=0,total=groups.length,errs=0;
-    progSet('レシートを解析中（0/'+added.length+'枚）',10);
+  var added=shotList.map(function(s){
+    var it={id:'q'+(++seq),thumb:s.thumb,b64:s.b64,date:today(),amount:'',items:'',state:'wait'};
+    queue.push(it);return it;
+  });
+  renderQueue();
 
-    var next=0;
-    function runOne(){
-      if(next>=groups.length)return Promise.resolve();
-      var g=groups[next++];
-      g.forEach(function(it){it.state='busy'});renderQueue();
-      return api('scan',{images:g.map(function(it){return it.b64})}).then(function(j){
-        if(j.limit)$('quotaState').textContent=j.used+' / '+j.limit+'回';
-        (j.results||[]).forEach(function(r,i){
-          var it=g[i];if(!it)return;
-          if(r.found&&r.total>0){
-            it.amount=r.total;it.date=r.date||it.date;
-            it.state=r.confidence==='low'?'low':'ok';
-          }else{it.state='ng'}
-        });
-      }).catch(function(e){
-        errs++;g.forEach(function(it){it.state='ng'});
-        status(e.message,true);
-      }).then(function(){
-        done++;
-        progSet('レシートを解析中（'+Math.min(added.length,done*BATCH)+'/'+added.length+'枚）',10+done/total*90);
-        renderQueue();
-        return runOne();
+  var groups=[];
+  for(var i=0;i<added.length;i+=BATCH)groups.push(added.slice(i,i+BATCH));
+  var next=0,doneImgs=0,errs=0;
+  progSet('レシートを解析中（0/'+added.length+'枚）',8);
+
+  function runGroup(g,retry){
+    g.forEach(function(it){it.state='busy'});renderQueue();
+    return api('scan',{images:g.map(function(it){return it.b64})}).then(function(j){
+      if(j.limit)$('quotaState').textContent=j.used+' / '+j.limit+'回';
+      (j.results||[]).forEach(function(r,i){
+        var it=g[i];if(!it)return;
+        if(r.found&&r.total>0){
+          it.amount=r.total;it.date=r.date||it.date;it.items=r.items||'';
+          it.state=r.confidence==='low'?'low':'ok';
+        }else{it.state='ng'}
       });
-    }
-    var lanes=[];
-    for(var p=0;p<Math.min(PARALLEL,groups.length);p++)lanes.push(runOne());
-    return Promise.all(lanes).then(function(){
-      progSet('完了',100);setTimeout(progClose,500);
-      running=false;renderQueue();
-      var ok=added.filter(function(it){return it.amount}).length;
-      status(ok+'/'+added.length+'枚を読み取りました'+(errs?'（'+errs+'件エラー）':'')+' — 金額を確認して記録してください');
+    }).catch(function(e){
+      if(e.busy&&(retry||0)<3){                       // 1分あたりの上限 → 待って自動再試行
+        progSet('混雑中のため待機しています…',null);
+        return sleep(8000).then(function(){return runGroup(g,(retry||0)+1)});
+      }
+      errs++;g.forEach(function(it){it.state='ng'});status(e.message,true);
     });
-  }).catch(function(e){
-    running=false;progClose();status(e.message,true);
+  }
+  function lane(){
+    if(next>=groups.length)return Promise.resolve();
+    var g=groups[next++];
+    return runGroup(g,0).then(function(){
+      doneImgs+=g.length;
+      progSet('レシートを解析中（'+doneImgs+'/'+added.length+'枚）',8+doneImgs/added.length*92);
+      renderQueue();return lane();
+    });
+  }
+  var lanes=[];
+  for(var p=0;p<Math.min(PARALLEL,groups.length);p++)lanes.push(lane());
+  Promise.all(lanes).then(function(){
+    progSet('完了',100);setTimeout(progClose,500);
+    running=false;renderQueue();
+    var ok=added.filter(function(it){return it.amount}).length;
+    status(ok+'/'+added.length+'枚を読み取りました'+(errs?'（'+errs+'件エラー）':'')+' — 内容を確認して記録してください');
   });
 }
 
-/* ---------- 読み取り結果の表示 ---------- */
+/* ---------- 読み取り結果 ---------- */
 function renderQueue(){
   $('queueBox').hidden=!queue.length;
   $('qCount').textContent=queue.length?queue.length+'件':'';
   $('queue').innerHTML=queue.map(function(it){
-    var st=it.state==='busy'?'<span class="st">解析中</span>'
+    var st=it.state==='busy'?'<span class="st">解析中…</span>'
       :it.state==='ng'?'<span class="st ng">未検出</span>'
-      :it.state==='low'?'<span class="st low">要確認</span>':'<span class="st"></span>';
+      :it.state==='low'?'<span class="st low">要確認</span>':'';
     return '<div class="item'+(it.state==='busy'?' busy':'')+'" data-id="'+it.id+'">'+
-      (it.thumb?'<img src="'+it.thumb+'" alt="">':'<img alt="">')+
+      '<img src="'+(it.thumb||'')+'" alt="">'+
       '<div class="fields">'+
-        '<input type="date" value="'+it.date+'" data-f="date">'+
+        '<div class="r1"><input type="date" value="'+it.date+'" data-f="date">'+st+'</div>'+
         '<div class="amtwrap"><span>¥</span><input type="number" inputmode="numeric" placeholder="0" value="'+(it.amount||'')+'" data-f="amount"></div>'+
-      '</div>'+st+
+        '<input type="text" class="memo" placeholder="内容（例: 食料品ほか）" value="'+esc(it.items)+'" data-f="items">'+
+      '</div>'+
       '<button class="x" data-x="1">✕</button></div>';
   }).join('');
-  var n=queue.filter(function(it){return Number(it.amount)>0}).length;
+  updateSaveBtn();
+}
+function updateSaveBtn(){
+  var n=queue.filter(function(q){return Number(q.amount)>0}).length;
   $('saveAll').textContent=n?n+'件をまとめて記録する':'記録する';
   $('saveAll').disabled=!n;
 }
 $('queue').addEventListener('input',function(e){
   var box=e.target.closest('.item');if(!box)return;
   var it=queue.filter(function(q){return q.id===box.dataset.id})[0];if(!it)return;
-  if(e.target.dataset.f==='amount'){it.amount=e.target.value;
-    var n=queue.filter(function(q){return Number(q.amount)>0}).length;
-    $('saveAll').textContent=n?n+'件をまとめて記録する':'記録する';$('saveAll').disabled=!n;}
-  if(e.target.dataset.f==='date')it.date=e.target.value;
+  it[e.target.dataset.f]=e.target.value;
+  if(e.target.dataset.f==='amount')updateSaveBtn();
 });
 $('queue').addEventListener('click',function(e){
   if(!e.target.dataset.x)return;
   var box=e.target.closest('.item');
-  queue=queue.filter(function(q){return q.id!==box.dataset.id});
-  renderQueue();
+  queue=queue.filter(function(q){return q.id!==box.dataset.id});renderQueue();
 });
-
 $('saveAll').onclick=function(){
   var picked=queue.filter(function(it){return Number(it.amount)>0&&it.date});
   if(!picked.length)return;
   var recs=picked.map(function(it){
-    return {id:String(Date.now())+Math.floor(Math.random()*10000),date:it.date,amount:Math.round(Number(it.amount))};
+    return {id:String(Date.now())+Math.floor(Math.random()*10000),date:it.date,
+            amount:Math.round(Number(it.amount)),items:(it.items||'').slice(0,60)};
   });
   records=records.concat(recs);cache();
   var last=recs[recs.length-1].date;
-  cursor=new Date(+last.slice(0,4),+last.slice(5,7)-1,1);
+  cursor=new Date(+last.slice(0,4),+last.slice(5,7)-1,1);selDay=null;
   queue=[];renderQueue();render();
   status(recs.length+'件を記録しました');
-  api('addMany',{records:recs}).catch(function(e){
-    status('サーバーに送れませんでした（端末には保存済み）: '+e.message,true);
-  });
+  api('addMany',{records:recs}).catch(function(e){status('サーバーに送れませんでした（端末には保存済み）: '+e.message,true)});
 };
 $('clearAll').onclick=function(){queue=[];renderQueue()};
 $('toManual').onclick=function(){
-  queue.push({id:'q'+(++seq),thumb:'',b64:null,date:today(),amount:'',state:'ok'});
+  queue.push({id:'q'+(++seq),thumb:'',b64:null,date:today(),amount:'',items:'',state:'ok'});
   renderQueue();
 };
 
-/* ---------- 月別表示 ---------- */
+/* ---------- 表示 ---------- */
+function dayTotals(key){
+  var map={};
+  records.forEach(function(r){
+    var d=String(r.date);
+    if(d.slice(0,7)!==key)return;
+    var n=+d.slice(8,10);map[n]=(map[n]||0)+Number(r.amount||0);
+  });
+  return map;
+}
+function compact(n){
+  if(n>=10000)return (n/10000).toFixed(n>=100000?0:1)+'万';
+  return n.toLocaleString('ja-JP');
+}
 function render(){
-  var key=ym(cursor);
-  $('mLabel').textContent=cursor.getFullYear()+'年'+(cursor.getMonth()+1)+'月';
-  var mine=records.filter(function(r){return String(r.date).slice(0,7)===key})
-    .sort(function(a,b){return a.date<b.date?1:-1});
+  var y=cursor.getFullYear(),m=cursor.getMonth(),key=ym(cursor);
+  $('mLabel').textContent=y+'年'+(m+1)+'月';
+
+  var mine=records.filter(function(r){return String(r.date).slice(0,7)===key});
   var sum=mine.reduce(function(s,r){return s+Number(r.amount||0)},0);
   $('mTotal').textContent=yen(sum);
   $('mSub').textContent=mine.length+'件'+(mine.length?' ・ 1件あたり '+yen(Math.round(sum/mine.length)):'');
 
   var months=[],i,d;
-  for(i=5;i>=0;i--){d=new Date(cursor.getFullYear(),cursor.getMonth()-i,1);months.push(d)}
+  for(i=5;i>=0;i--){d=new Date(y,m-i,1);months.push(d)}
   var totals=months.map(function(d){var k=ym(d);
     return records.reduce(function(s,r){return String(r.date).slice(0,7)===k?s+Number(r.amount||0):s},0)});
   var max=Math.max.apply(null,totals.concat([1]));
@@ -371,12 +489,53 @@ function render(){
     return '<div><i class="'+(ym(d)===key?'on':'')+'" style="height:'+Math.max(3,Math.round(totals[i]/max*58))+'px"></i><small>'+(d.getMonth()+1)+'</small></div>';
   }).join('');
 
-  $('list').innerHTML=mine.length?mine.map(function(r){
-    return '<div class="row"><span class="grow">'+String(r.date).slice(5).replace('-','月')+'日</span>'+
-           '<span class="amount">'+yen(r.amount)+'</span>'+
-           '<button class="del" data-id="'+r.id+'">削除</button></div>';
-  }).join(''):'<p class="empty">この月の記録はまだありません</p>';
+  // カレンダー
+  var first=new Date(y,m,1).getDay(), len=new Date(y,m+1,0).getDate(), tot=dayTotals(key), html='';
+  for(i=0;i<first;i++)html+='<div class="d blank"></div>';
+  for(i=1;i<=len;i++){
+    var v=tot[i]||0, isToday=ymd(y,m+1,i)===today(), on=selDay===i;
+    html+='<button class="d'+(isToday?' today':'')+(on?' on':'')+'" data-day="'+i+'">'+
+      '<span class="n">'+i+'</span>'+(v?'<span class="v">'+compact(v)+'</span>':'')+'</button>';
+  }
+  $('cal').innerHTML=html;
+  $('filterNote').textContent=selDay?(m+1)+'月'+selDay+'日を表示中':'';
+
+  // 一覧
+  var shown=mine.filter(function(r){return !selDay||+String(r.date).slice(8,10)===selDay})
+    .sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0});
+  $('list').innerHTML=shown.length?shown.map(function(r){
+    return '<div class="rec" data-id="'+r.id+'">'+
+      '<span class="d">'+(+String(r.date).slice(5,7))+'/'+(+String(r.date).slice(8,10))+'</span>'+
+      '<span class="t'+(r.items?'':' none')+'">'+esc(r.items||'内容なし')+'</span>'+
+      '<span class="a">'+yen(r.amount)+'</span><span class="chev">›</span></div>';
+  }).join(''):'<p class="empty">'+(selDay?'この日の記録はありません':'この月の記録はまだありません')+'</p>';
 }
+$('cal').addEventListener('click',function(e){
+  var b=e.target.closest('.d');if(!b||!b.dataset.day)return;
+  var n=+b.dataset.day;selDay=(selDay===n)?null:n;render();
+});
+$('list').addEventListener('click',function(e){
+  var b=e.target.closest('.rec');if(!b)return;
+  var r=records.filter(function(x){return String(x.id)===b.dataset.id})[0];if(!r)return;
+  editId=r.id;$('eDate').value=r.date;$('eAmount').value=r.amount;$('eItems').value=r.items||'';
+  openSheet($('sheetEdit'));
+});
+$('eSave').onclick=function(){
+  var r=records.filter(function(x){return String(x.id)===editId})[0];if(!r)return;
+  var d=$('eDate').value,a=parseInt($('eAmount').value,10);
+  if(!d||!a||a<=0){status('日付と金額を確認してください',true);return}
+  r.date=d;r.amount=a;r.items=$('eItems').value.slice(0,60);
+  cache();closeSheets();render();status('編集を保存しました');
+  api('update',{id:r.id,date:r.date,amount:r.amount,items:r.items})
+    .catch(function(e){status('サーバー側の更新に失敗しました: '+e.message,true)});
+};
+$('eDelete').onclick=function(){
+  if(!confirm('この記録を削除しますか？'))return;
+  records=records.filter(function(x){return String(x.id)!==editId});cache();closeSheets();render();
+  api('delete',{id:editId}).catch(function(){status('サーバー側の削除に失敗しました',true)});
+};
+$('eCancel').onclick=function(){closeSheets()};
+
 function pull(){
   if(!secret){$('syncState').textContent='未設定';status('パスワードを入力すると同期します');return}
   api('list').then(function(j){
@@ -385,36 +544,28 @@ function pull(){
   }).catch(function(e){$('syncState').textContent='エラー';status(e.message,true)});
 }
 
-/* ---------- その他操作 ---------- */
+/* ---------- シート・その他 ---------- */
 function openSheet(el){$('scrim').classList.add('on');el.classList.add('on')}
-function closeSheets(){$('scrim').classList.remove('on');$('sheetSettings').classList.remove('on')}
-$('pick').onclick=function(){$('file').click()};
-$('file').onchange=function(e){onFiles(e.target.files);e.target.value=''};
+function closeSheets(){$('scrim').classList.remove('on');$('sheetEdit').classList.remove('on');$('sheetSettings').classList.remove('on')}
 $('scrim').onclick=closeSheets;
 $('openSettings').onclick=function(){$('secret').value=secret;openSheet($('sheetSettings'))};
 $('closeSettings').onclick=closeSheets;
-$('saveUrl').onclick=function(){
+$('saveSecret').onclick=function(){
   secret=$('secret').value.trim();
   if(!secret){status('パスワードを入力してください',true);return}
   localStorage.setItem(K_SEC,secret);closeSheets();pull();
 };
-$('list').onclick=function(e){
-  var b=e.target.closest('.del');if(!b)return;
-  var id=b.dataset.id;
-  records=records.filter(function(r){return String(r.id)!==id});cache();render();
-  api('delete',{id:id}).catch(function(){status('サーバー側の削除に失敗しました',true)});
-};
 $('doExport').onclick=function(){
-  var csv='date,amount\n'+records.slice().sort(function(a,b){return a.date<b.date?-1:1})
-    .map(function(r){return r.date+','+r.amount}).join('\n');
+  var csv='date,amount,items\n'+records.slice().sort(function(a,b){return a.date<b.date?-1:1})
+    .map(function(r){return r.date+','+r.amount+',"'+String(r.items||'').replace(/"/g,'""')+'"'}).join('\n');
   var a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([new Uint8Array([0xEF,0xBB,0xBF]),csv],{type:'text/csv'}));
   a.download='expenses.csv';a.click();
 };
-$('prevM').onclick=function(){cursor.setMonth(cursor.getMonth()-1);render()};
-$('nextM').onclick=function(){cursor.setMonth(cursor.getMonth()+1);render()};
+$('prevM').onclick=function(){cursor.setMonth(cursor.getMonth()-1);selDay=null;render()};
+$('nextM').onclick=function(){cursor.setMonth(cursor.getMonth()+1);selDay=null;render()};
 
-renderQueue();render();pull();
+renderTray();renderQueue();render();pull();
 })();
 </script>
 </body>
